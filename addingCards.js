@@ -179,27 +179,28 @@ var string = "";
 
 port.open(function (err) {
     if (err) {
-        // return console.log('Error opening port: ', err.message);
+        return console.log('Error opening port: ', err.message);
     }
 });
 
 // The open event is always emitted
 port.on('open', function () {
-    console.log("Guessing Cards");
+    console.log("Port Open");
 });
 
 port.on('data', function (data) {
     string += data.toString("binary");
     var stringArr = _.split(string, "\n");
     if (stringArr.length > 1) {
+        card = cards[i++];
+        console.log("This was saved to " + card.name);
         var newCard = _.chain(stringArr).head().split(" ").join("").trim().value();
+        card.value = newCard;
+        console.log(newCard);
         string = "";
-        var cardSelected = _.find(cards, function (n) {
-            return n.value == newCard;
-
-        });
-        if (cardSelected) {
-            console.log("The Card is " + cardSelected.name);
+        if (i % 13 === 0) {
+            console.log(JSON.stringify(cards));
         }
     }
+
 });
