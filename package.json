@@ -1,0 +1,25 @@
+{
+  "name": "usbWohlig",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WohligTechnology/usb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WohligTechnology/usb/issues"
+  },
+  "homepage": "https://github.com/WohligTechnology/usb#readme",
+  "dependencies": {
+    "node-hid": "^0.5.7",
+    "serialport": "^5.0.0",
+    "usb": "^1.2.0",
+    "usbdevice": "^1.1.0"
+  }
+}

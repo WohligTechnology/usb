@@ -1,39 +1,42 @@
-var usb = require("usb");
-var _ = require("lodash");
-var async = require("async");
-var USBDevice = require("usbdevice");
-// var usbdevice = new USBDevice(vendorId, productId);
-allPort = usb.getDeviceList();
+var HID = require('node-hid');
+var _  =require("lodash");
+var async  =require("async");
+var devices = HID.devices();
+console.log(devices);
 
-var ourVendorId= [ 1137, 45039 ];
+// for RFID Reader
+var vendorID = 45039;
+var productID = 3841;
 
-var allEndPoints = _.map(allPort,function(n,index) {
-    if(_.indexOf(ourVendorId,n.deviceDescriptor.idVendor) > -1) {
-        n.open();
-        return {endPoint:n.interfaces[0].endpoints,vendor:n.deviceDescriptor.idVendor,product:n.deviceDescriptor.idProduct};
-    } else {
-        return false;
-    }
-    
-});
 
-var allEndPoints = _.compact(allEndPoints);
+// for Tackpad Reader
+// var vendorID = 16700;
+// var productID = 12314;
 
-console.log(allEndPoints);
-var usb1 = new USBDevice(allEndPoints[0].vendor, allEndPoints[0].product);
-usb1.connect();
-var stream = usb1.stream();
-stream.on("data",function(err,data) {
-    console.log("This is the Error");
-    console.log(err);
-    console.log("This is Data");
+// var rfidDevice  = _.find(devices,function(n) {
+// return  (n.vendorId == vendorID && n.productId == productID);
+// });
+var rfidDevice =  new HID.HID(vendorID,productID);
+
+
+rfidDevice.on("data", function(data) {
     console.log(data);
+    var textChunk = data.toString();
+    // console.log(textChunk);
+});
+
+// rfidDevice.sendFeatureReport(data)
+rfidDevice.on("error", function(err) {
+    console.log(err);
 });
 
 
 
+console.log(rfidDevice.getDeviceInfo());
 
 
 
-
+setTimeout(function() {
+    rfidDevice.write([0x000000]);
+},1000);
 
