@@ -26,7 +26,11 @@ port.on('data', function (data) {
     string += data.toString("binary");
     var stringArr = _.split(string, "\n");
     if (stringArr.length > 1) {
-        console.log(stringArr[0].replace(" ", ""));
+        console.log(_.chain(stringArr).head().split(" ").join("").trim().value());
         string = "";
     }
 });
+
+
+var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"];
+var colors = ["s", "h", "c", "d"];
