@@ -1,42 +1,32 @@
 var HID = require('node-hid');
-var _  =require("lodash");
-var async  =require("async");
-var devices = HID.devices();
-console.log(devices);
+var _ = require("lodash");
+var async = require("async");
 
-// for RFID Reader
-var vendorID = 45039;
-var productID = 3841;
-
-
-// for Tackpad Reader
-// var vendorID = 16700;
-// var productID = 12314;
-
-// var rfidDevice  = _.find(devices,function(n) {
-// return  (n.vendorId == vendorID && n.productId == productID);
-// });
-var rfidDevice =  new HID.HID(vendorID,productID);
-
-
-rfidDevice.on("data", function(data) {
-    console.log(data);
-    var textChunk = data.toString();
-    // console.log(textChunk);
-});
-
-// rfidDevice.sendFeatureReport(data)
-rfidDevice.on("error", function(err) {
-    console.log(err);
+var SerialPort = require('serialport');
+var port = new SerialPort('/dev/tty.usbmodem1421', {
+    baudRate: 9600
 });
 
 
-
-console.log(rfidDevice.getDeviceInfo());
-
+var string = "";
 
 
-setTimeout(function() {
-    rfidDevice.write([0x000000]);
-},1000);
+port.open(function (err) {
+    if (err) {
+        return console.log('Error opening port: ', err.message);
+    }
+});
 
+// The open event is always emitted
+port.on('open', function () {
+    console.log("Port Open");
+});
+
+port.on('data', function (data) {
+    string += data.toString("binary");
+    var stringArr = _.split(string, "\n");
+    if (stringArr.length > 1) {
+        console.log(stringArr[0].replace(" ", ""));
+        string = "";
+    }
+});
