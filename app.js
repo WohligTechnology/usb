@@ -220,7 +220,6 @@ port.on('data', function (data) {
         string = "";
         var cardSelected = _.find(cards, function (n) {
             return n.value == newCard;
-
         });
         if (cardSelected) {
             console.log("The Card is " + cardSelected.name);
