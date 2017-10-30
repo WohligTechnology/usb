@@ -1,8 +1,11 @@
+var hostName = "http://localhost:8081/";
+
+
 var HID = require('node-hid');
 var _ = require("lodash");
 var async = require("async");
 var SerialPort = require('serialport');
-var port = new SerialPort('/dev/tty.usbmodem1421', {
+var port = new SerialPort('/dev/tty.usbmodem1411', {
     baudRate: 9600
 });
 var cards = [];
@@ -173,6 +176,27 @@ var i = 0; {
 }
 
 
+function callApi(cardName) {
+    var data = JSON.stringify({
+        "card": cardName
+    });
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === this.DONE) {
+            console.log(this.responseText);
+        }
+    });
+
+    xhr.open("POST", hostName + "api/Player/serve");
+    xhr.setRequestHeader("content-type", "application/json");
+
+    xhr.send(data);
+}
+
+
 
 var string = "";
 
@@ -184,7 +208,7 @@ port.open(function (err) {
 });
 
 // The open event is always emitted
-port.on('open', function () {
+port.on('open', function (data) {
     console.log("Guessing Cards");
 });
 
@@ -200,6 +224,7 @@ port.on('data', function (data) {
         });
         if (cardSelected) {
             console.log("The Card is " + cardSelected.name);
+            callApi(cardSelected.name);
         }
     }
 });
