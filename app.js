@@ -208,7 +208,7 @@ port.open(function (err) {
 });
 
 // The open event is always emitted
-port.on('open', function (data) {
+port.on('open', function () {
     console.log("Guessing Cards");
 });
 
