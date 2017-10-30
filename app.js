@@ -3,6 +3,7 @@ var hostName = "http://localhost:8081/";
 
 var HID = require('node-hid');
 var _ = require("lodash");
+var request = require("request");
 var async = require("async");
 var SerialPort = require('serialport');
 var port = new SerialPort('/dev/tty.usbmodem1411', {
@@ -177,23 +178,27 @@ var i = 0; {
 
 
 function callApi(cardName) {
-    var data = JSON.stringify({
-        "card": cardName
-    });
 
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
+    var options = {
+        method: 'POST',
+        url: 'http://localhost:8081/api/Player/serve',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: {
+            card: cardName
+        },
+        json: true
+    };
 
-    xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === this.DONE) {
-            console.log(this.responseText);
+    request(options, function (error, response, body) {
+        if (error) {
+            console.log(error);
         }
+
+        console.log(body);
     });
 
-    xhr.open("POST", hostName + "api/Player/serve");
-    xhr.setRequestHeader("content-type", "application/json");
-
-    xhr.send(data);
 }
 
 
