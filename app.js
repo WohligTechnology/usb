@@ -1,6 +1,6 @@
 var hostName = "http://localhost:8081/";
 
-
+var beep = require('beepbeep');
 var HID = require('node-hid');
 var _ = require("lodash");
 var request = require("request");
@@ -218,6 +218,7 @@ port.on('open', function () {
 });
 
 port.on('data', function (data) {
+
     string += data.toString("binary");
     var stringArr = _.split(string, "\n");
     if (stringArr.length > 1) {
@@ -227,6 +228,12 @@ port.on('data', function (data) {
             return n.value == newCard;
         });
         if (cardSelected) {
+            if (cardSelected.name.length == 2) {
+                beep();
+            } else {
+                beep(5);
+            }
+
             console.log("The Card is " + cardSelected.name);
             callApi(cardSelected.name);
         }
