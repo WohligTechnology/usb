@@ -12,7 +12,7 @@ var port = new SerialPort('/dev/tty.usbmodem1411', {
 var cards = [];
 var i = 0; {
     cards = [{
-        "name": "1s",
+        "name": "As",
         "value": "0406B9020A5481"
     }, {
         "name": "2s",
@@ -51,7 +51,7 @@ var i = 0; {
         "name": "Ks",
         "value": "041DB0020A5480"
     }, {
-        "name": "1d",
+        "name": "Ad",
         "value": "04B87C020A5480"
     }, {
         "name": "2d",
@@ -90,7 +90,7 @@ var i = 0; {
         "name": "Kd",
         "value": "049CB1020A5480"
     }, {
-        "name": "1c",
+        "name": "Ac",
         "value": "0475B9020A5480"
     }, {
         "name": "2c",
@@ -129,7 +129,7 @@ var i = 0; {
         "name": "Kc",
         "value": "04BDB9020A5480"
     }, {
-        "name": "1h",
+        "name": "Ah",
         "value": "046E6E020A5481"
     }, {
         "name": "2h",
@@ -218,7 +218,6 @@ port.on('open', function () {
 });
 
 port.on('data', function (data) {
-
     string += data.toString("binary");
     var stringArr = _.split(string, "\n");
     if (stringArr.length > 1) {
@@ -233,7 +232,6 @@ port.on('data', function (data) {
             } else {
                 beep(5);
             }
-
             console.log("The Card is " + cardSelected.name);
             callApi(cardSelected.name);
         }
